@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
@@ -19,14 +19,43 @@ public class ZombieBehaviour : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
         if(hp> 0)
         {
-            //transform.LookAt(player.transform.position);
-            //Vector3 playerDirection = transform.position - player.transform.position;
+            bool seesPlayer = false;
+            bool hearsPlayer = false;
 
-            //transform.Translate(Vector3.forward * Time.deltaTime);
+            RaycastHit hit;
+            //wektor prowadz¹cy od zombiaka do gracza
+            Vector3 playerVector = player.transform.position - transform.position;
 
-            agent.destination = player.transform.position;
+            //testowy raycast
+            //Debug.DrawRay(transform.position, playerVector, Color.yellow);
+
+            //"wzrok" zombiaka
+            Physics.Raycast(transform.position, playerVector, out hit);
+            if (hit.collider.gameObject.CompareTag("Player"))
+                seesPlayer = true;
+
+            //znajdz wszystkow w promieniu 5m
+            Collider[] nearby = Physics.OverlapSphere(transform.position, 5f);
+            foreach (Collider collider in nearby)
+            {
+                if (collider.transform.CompareTag("Player"))
+                {
+                    hearsPlayer = true;
+                }
+            }
+
+            if (seesPlayer || hearsPlayer)
+            {
+                agent.destination = player.transform.position;
+                agent.isStopped = false;
+            }
+            else
+            {
+                agent.isStopped = true;
+            }
         }
         
     }
