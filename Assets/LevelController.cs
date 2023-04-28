@@ -2,25 +2,26 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class LevelController : MonoBehaviour
 
 {
-    
-    private int maxZombies = 3;
+
+    private int maxZombies = 9;
     private int maxHeal = 1;
     public GameObject ZombiePrefab;
     public GameObject HealPrefab;
     // Start is called before the first frame update
     void Start()
     {
-      
+
     }
 
     // Update is called once per frame
     void Update()
     {
-       var zombies = GameObject.FindGameObjectsWithTag("Enemy");
+        var zombies = GameObject.FindGameObjectsWithTag("Enemy");
         var heals = GameObject.FindGameObjectsWithTag("Heal");
         if (zombies.Count() < maxZombies)
         {
@@ -30,7 +31,7 @@ public class LevelController : MonoBehaviour
         {
             SpawnHeal();
         }
-       
+
     }
     void SpawnZombie()
     {
@@ -42,7 +43,7 @@ public class LevelController : MonoBehaviour
             spawnPosition.y = 0;
         }
         GameObject newZombie = Instantiate(ZombiePrefab, spawnPosition, Quaternion.identity);
-        
+
     }
 
     void SpawnHeal()

@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 using UnityEngine.AI;
+using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
@@ -60,17 +61,18 @@ public class PlayerController : MonoBehaviour
         Destroy(bullet, 5);
     }
 
-    private void OnCollisionEnter(Collision collision)
+    private void OnTriggerEnter(Collider collision)
     {
-        if(collision.gameObject.CompareTag("Enemy"))
+        if (collision.gameObject.CompareTag("Enemy"))
         {
-   
+
             hp--;
-            if(hp <= 0) Die();
+            if (hp <= 0) Die();
             hpScrollBar.size = hp / 10;
             Vector3 pushVector = collision.gameObject.transform.position - transform.position;
-            collision.gameObject.GetComponent<Rigidbody>().AddForce(pushVector.normalized*5, ForceMode.Impulse);
-        } else if (collision.gameObject.CompareTag("Heal"))
+            collision.gameObject.GetComponent<Rigidbody>().AddForce(pushVector.normalized * 5, ForceMode.Impulse);
+        }
+        else if (collision.gameObject.CompareTag("Heal"))
         {
             hp = 10;
             hpScrollBar.size = hp / 10;
@@ -79,11 +81,13 @@ public class PlayerController : MonoBehaviour
     }
     void Die()
     {
-        GetComponent<BoxCollider>().enabled = false;
-        transform.Translate(Vector3.up);
-        transform.Rotate(Vector3.right * -90);
-        
+        SceneManager.LoadScene("GameOver");
+        //GetComponent<BoxCollider>().enabled = false;
+        //transform.Translate(Vector3.up);
+        //transform.Rotate(Vector3.right * -90);
+
         //Time.timeScale = 0;
+
     }
 
     public void Heal()
